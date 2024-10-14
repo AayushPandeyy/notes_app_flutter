@@ -52,9 +52,17 @@ class _HomePageState extends State<HomePage> {
                   int index = bottomBarIcons.indexOf(icon);
                   return GestureDetector(
                     onTap: () {
-                      setState(() {
-                        _selectedBottomBarIndex = index;
-                      });
+                      if (index == 2) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const CreateNotesScreen()));
+                      } else {
+                        setState(() {
+                          _selectedBottomBarIndex = index;
+                        });
+                      }
                     },
                     child: Container(
                       height: 40,
