@@ -89,13 +89,13 @@ class _TagsPageState extends State<TagsPage> {
                   tagName: "hashtag",
                 ),
                 TagTile(
+                  tagName: "so",
+                ),
+                TagTile(
                   tagName: "hawa",
                 ),
                 TagTile(
                   tagName: "huri",
-                ),
-                TagTile(
-                  tagName: "so",
                 ),
                 TagTile(
                   tagName: "random",

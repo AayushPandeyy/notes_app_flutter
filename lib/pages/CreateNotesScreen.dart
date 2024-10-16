@@ -62,7 +62,7 @@ class _CreateNotesScreenState extends State<CreateNotesScreen> {
                       decoration: InputDecoration(
                           hintText: "Start Typing...",
                           hintStyle:
-                              TextStyle(color: ColrosToUse().primaryColor),
+                              TextStyle(color: ColorsToUse().primaryColor),
                           border: InputBorder.none),
                     ),
                   ),
