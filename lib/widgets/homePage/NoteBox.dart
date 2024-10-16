@@ -13,11 +13,11 @@ class _NoteBoxState extends State<NoteBox> {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.sizeOf(context).width * 0.45,
-      height: MediaQuery.sizeOf(context).height * 0.35,
+      height: MediaQuery.sizeOf(context).height * 0.3,
       decoration: BoxDecoration(
-          color: widget.bgColor, borderRadius: BorderRadius.circular(10)),
+          color: widget.bgColor, borderRadius: BorderRadius.circular(15)),
       child: const Padding(
-        padding: EdgeInsets.all(8.0),
+        padding: EdgeInsets.all(15.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -40,7 +40,7 @@ class _NoteBoxState extends State<NoteBox> {
             ),
             Text(
                 overflow: TextOverflow.ellipsis,
-                maxLines: 10,
+                maxLines: 8,
                 style: TextStyle(fontSize: 12),
                 "This is a testing note and just to take space the text is being written here and this text contains no meaning as life of mine and this test is trash just like my skills in UI/UX but one mans trash is another mans.....This is a testing note and just to take space the text is being written here and this text contains no meaning as life of mine and this test is trash just like my skills in UI/UX but one mans trash is another mans.....This is a testing note and just to take space the text is being written here and this text contains no meaning as life of mine and this test is trash just like my skills in UI/UX but one mans trash is another mans..... This is a testing note and just to take space the text is being written here and this text contains no meaning as life of mine and this test is trash just like my skills in UI/UX but one mans trash is another mans....."),
             Row(

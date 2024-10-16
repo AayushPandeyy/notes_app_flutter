@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:notes_app_flutter/constants/ColorsToUse.dart';
 import 'package:notes_app_flutter/pages/CreateNotesScreen.dart';
 import 'package:notes_app_flutter/pages/LandingPage.dart';
 import 'package:notes_app_flutter/pages/PinnedPage.dart';
@@ -32,7 +33,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      backgroundColor: const Color(0xff1a434e),
+      backgroundColor: ColrosToUse().primaryColor,
       body: SizedBox(
         height: double.infinity,
         width: double.infinity,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:notes_app_flutter/constants/ColorsToUse.dart';
 
 class CreateNotesScreen extends StatefulWidget {
   const CreateNotesScreen({super.key});
@@ -54,13 +55,14 @@ class _CreateNotesScreenState extends State<CreateNotesScreen> {
                 ),
                 Expanded(
                   child: Container(
-                    child: const TextField(
+                    child: TextField(
                       expands: true,
                       maxLines: null,
                       cursorColor: Colors.black,
                       decoration: InputDecoration(
-                          hintText: "Start Typing",
-                          hintStyle: TextStyle(color: Colors.grey),
+                          hintText: "Start Typing...",
+                          hintStyle:
+                              TextStyle(color: ColrosToUse().primaryColor),
                           border: InputBorder.none),
                     ),
                   ),
