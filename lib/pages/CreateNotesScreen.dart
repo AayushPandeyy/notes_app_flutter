@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:notes_app_flutter/constants/ColorsToUse.dart';
 
 import "package:flutter_quill/flutter_quill.dart" as quill;
+import 'package:notes_app_flutter/constants/ColorsToUse.dart';
+import 'package:notes_app_flutter/firebase/FirestoreService.dart';
+import 'package:notes_app_flutter/utilities/DialogBox.dart';
 
 class CreateNotesScreen extends StatefulWidget {
   const CreateNotesScreen({super.key});
@@ -12,15 +14,11 @@ class CreateNotesScreen extends StatefulWidget {
 }
 
 class _CreateNotesScreenState extends State<CreateNotesScreen> {
+  final FirestoreService service = FirestoreService();
+  final titleController = TextEditingController();
+  bool isPinned = false;
   final _controller = quill.QuillController.basic();
-  final int _selectedBottomBarIndex = 0;
-  final List<Widget> bottomBarWidgets = [
-    const Icon(Icons.image_rounded),
-    const Icon(Icons.format_bold),
-    const Icon(Icons.format_italic),
-    const Icon(Icons.subdirectory_arrow_left_sharp),
-    const Icon(Icons.subdirectory_arrow_right_sharp),
-  ];
+
   String currDate =
       DateFormat("MMM dd , EEE , yyyy  hh:mm a").format(DateTime.now());
   @override
@@ -33,8 +31,25 @@ class _CreateNotesScreenState extends State<CreateNotesScreen> {
             },
             icon: const Icon(Icons.arrow_back)),
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.push_pin)),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.check))
+          IconButton(
+              onPressed: () {
+                setState(() {
+                  isPinned = !isPinned;
+                });
+              },
+              icon: Icon(
+                Icons.push_pin,
+                color: isPinned ? ColorsToUse().primaryColor : Colors.black,
+              )),
+          IconButton(
+              onPressed: () async {
+                DialogBox().showLoadingDialog(context, "LLoading");
+                await service.saveNoteToFirestore(
+                    _controller, isPinned, titleController.text);
+                Navigator.pop(context);
+                Navigator.pop(context);
+              },
+              icon: const Icon(Icons.check))
         ],
       ),
       body: Stack(children: [
@@ -47,11 +62,13 @@ class _CreateNotesScreenState extends State<CreateNotesScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(currDate),
-                const TextField(
-                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                TextField(
+                  controller: titleController,
+                  style: const TextStyle(
+                      fontSize: 30, fontWeight: FontWeight.bold),
                   maxLines: 1,
                   cursorColor: Colors.black,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       hintText: "Title",
                       hintStyle: TextStyle(color: Colors.grey),
                       border: InputBorder.none),
@@ -62,16 +79,6 @@ class _CreateNotesScreenState extends State<CreateNotesScreen> {
                     configurations: const quill.QuillEditorConfigurations(
                       placeholder: "Start Typing...",
                     ),
-                    // child: TextField(
-                    //   expands: true,
-                    //   maxLines: null,
-                    //   cursorColor: Colors.black,
-                    //   decoration: InputDecoration(
-                    //       hintText: "Start Typing...",
-                    //       hintStyle:
-                    //           TextStyle(color: ColorsToUse().primaryColor),
-                    //       border: InputBorder.none),
-                    // ),
                   ),
                 )
               ],

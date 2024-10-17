@@ -68,39 +68,36 @@ class _PinnedPageState extends State<PinnedPage> {
             const SizedBox(
               height: 10,
             ),
-            StaggeredGrid.count(
-                crossAxisCount: 4, // Number of columns
-                mainAxisSpacing: 4,
-                crossAxisSpacing: 4,
-                children: const [
-                  StaggeredGridTile.fit(
-                      crossAxisCellCount: 2,
-                      child: NoteBox(
-                        bgColor: Color(0xfffaf2ea),
-                      )),
-                  StaggeredGridTile.fit(
-                      crossAxisCellCount: 2,
-                      child: NoteBox(
-                        bgColor: Color(0xffe4def7),
-                      )),
-                  StaggeredGridTile.fit(
-                      crossAxisCellCount: 2,
-                      child: NoteBox(
-                        bgColor: Color(0xffffdf75),
-                      )),
-                  StaggeredGridTile.fit(
-                      crossAxisCellCount: 2,
-                      child: NoteBox(
-                        bgColor: Color(0xffffd3d3),
-                      )),
-                  StaggeredGridTile.fit(
-                      crossAxisCellCount: 2,
-                      child: NoteBox(
-                        bgColor: Color(0xffc3d3d8),
-                      )),
-                ])
-          ],
-        ),
+            
+                // children: const [
+                //   StaggeredGridTile.fit(
+                //       crossAxisCellCount: 2,
+                //       child: NoteBox(
+                //         bgColor: Color(0xfffaf2ea),
+                //       )),
+                //   StaggeredGridTile.fit(
+                //       crossAxisCellCount: 2,
+                //       child: NoteBox(
+                //         bgColor: Color(0xffe4def7),
+                //       )),
+                //   StaggeredGridTile.fit(
+                //       crossAxisCellCount: 2,
+                //       child: NoteBox(
+                //         bgColor: Color(0xffffdf75),
+                //       )),
+                //   StaggeredGridTile.fit(
+                //       crossAxisCellCount: 2,
+                //       child: NoteBox(
+                //         bgColor: Color(0xffffd3d3),
+                //       )),
+                //   StaggeredGridTile.fit(
+                //       crossAxisCellCount: 2,
+                //       child: NoteBox(
+                //         bgColor: Color(0xffc3d3d8),
+                //       )),
+                // ])
+          
+        ]),
       ),
     );
   }

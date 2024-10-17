@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
+import "package:flutter_quill/flutter_quill.dart" as quill;
 
 class NoteBox extends StatefulWidget {
+  final String title;
+  final quill.QuillController controller;
   final Color bgColor;
-  const NoteBox({super.key, required this.bgColor});
+  const NoteBox(
+      {super.key,
+      required this.bgColor,
+      required this.title, required this.controller,
+      });
 
   @override
   State<NoteBox> createState() => _NoteBoxState();
@@ -16,8 +23,8 @@ class _NoteBoxState extends State<NoteBox> {
       height: MediaQuery.sizeOf(context).height * 0.3,
       decoration: BoxDecoration(
           color: widget.bgColor, borderRadius: BorderRadius.circular(15)),
-      child: const Padding(
-        padding: EdgeInsets.all(15.0),
+      child: Padding(
+        padding: const EdgeInsets.all(15.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -28,22 +35,29 @@ class _NoteBoxState extends State<NoteBox> {
                   child: Text(
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2,
-                    "Title of the note ",
-                    style: TextStyle(fontSize: 24),
+                    widget.title,
+                    style: const TextStyle(fontSize: 24),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 15,
                 ),
-                Icon(Icons.more_horiz)
+                const Icon(Icons.more_horiz)
               ],
             ),
-            Text(
-                overflow: TextOverflow.ellipsis,
-                maxLines: 8,
-                style: TextStyle(fontSize: 12),
-                "This is a testing note and just to take space the text is being written here and this text contains no meaning as life of mine and this test is trash just like my skills in UI/UX but one mans trash is another mans.....This is a testing note and just to take space the text is being written here and this text contains no meaning as life of mine and this test is trash just like my skills in UI/UX but one mans trash is another mans.....This is a testing note and just to take space the text is being written here and this text contains no meaning as life of mine and this test is trash just like my skills in UI/UX but one mans trash is another mans..... This is a testing note and just to take space the text is being written here and this text contains no meaning as life of mine and this test is trash just like my skills in UI/UX but one mans trash is another mans....."),
-            Row(
+            quill.QuillEditor.basic(
+              controller: widget.controller,
+              configurations: const quill.QuillEditorConfigurations(
+                checkBoxReadOnly: true,
+                
+              ),
+            ),
+            // Text(
+            //     overflow: TextOverflow.ellipsis,
+            //     maxLines: 8,
+            //     style: const TextStyle(fontSize: 12),
+            //     widget.content),
+            const Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text("Sun, Oct 14, 2024"),
