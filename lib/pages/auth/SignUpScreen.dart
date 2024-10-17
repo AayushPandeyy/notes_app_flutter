@@ -1,5 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:notes_app_flutter/constants/ColorsToUse.dart';
+import 'package:notes_app_flutter/firebase/AuthService.dart';
+import 'package:notes_app_flutter/pages/auth/LoginScreen.dart';
+import 'package:notes_app_flutter/utilities/DialogBox.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -9,6 +14,76 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController usernameController = TextEditingController();
+  final dialogBox = DialogBox();
+
+  bool obscure = true;
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    usernameController.dispose();
+    super.dispose();
+  }
+
+  Future<void> signUp(BuildContext context) async {
+    final AuthService authService = AuthService();
+    try {
+      dialogBox.showLoadingDialog(context, "Registering User"); // Debug print
+      UserCredential user = await authService.signUp(emailController.text,
+          passwordController.text, usernameController.text);
+
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text("Verification Email Sent"),
+          content: const Text(
+              "A verification email has been sent. Please verify your email and login to your account."),
+          actions: [
+            TextButton(
+              onPressed: () => {
+                Navigator.pop(context),
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const LoginScreen()))
+              },
+              child: const Text("OK"),
+            ),
+          ],
+        ),
+      );
+    } catch (err) {
+      print(err.runtimeType);
+
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text("Error"),
+          content: Text("Error: $err"),
+          actions: <Widget>[
+            TextButton(
+              child: const Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        ),
+      );
+      throw Exception(err);
+    }
+  }
+
+  void reset() {
+    emailController.clear();
+    passwordController.clear();
+    usernameController.clear();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -44,152 +119,169 @@ class _SignUpScreenState extends State<SignUpScreen> {
           ),
           Padding(
             padding: const EdgeInsets.all(15.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const CircleAvatar(
-                  radius: 50,
-                  child: Icon(
-                    Icons.android_outlined,
-                    size: 50,
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Sign Up",
-                    style: TextStyle(color: Colors.white, fontSize: 30),
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Username",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-                const SizedBox(
-                  height: 2,
-                ),
-                TextField(
-                  decoration: InputDecoration(
-                      fillColor: Colors.white,
-                      filled: true,
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10))),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Email",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-                const SizedBox(
-                  height: 2,
-                ),
-                TextField(
-                  decoration: InputDecoration(
-                      fillColor: Colors.white,
-                      filled: true,
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10))),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Password",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-                const SizedBox(
-                  height: 2,
-                ),
-                TextField(
-                  obscureText: true,
-                  decoration: InputDecoration(
-                      fillColor: Colors.white,
-                      filled: true,
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10))),
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                Container(
-                  width: 122,
-                  height: 40,
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Center(
-                    child: Text(
-                      "Register",
-                      style: TextStyle(color: ColorsToUse().primaryColor),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Row(
+            child: Center(
+              child: SingleChildScrollView(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
-                      width: 125,
-                      height: 1,
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.white)),
+                    const CircleAvatar(
+                      radius: 50,
+                      child: Icon(
+                        Icons.android_outlined,
+                        size: 50,
+                      ),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.all(8.0),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const Align(
+                      alignment: Alignment.centerLeft,
                       child: Text(
-                        "OR",
+                        "Sign Up",
+                        style: TextStyle(color: Colors.white, fontSize: 30),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Username",
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
-                    Container(
-                      width: 125,
-                      height: 1,
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.white)),
+                    const SizedBox(
+                      height: 2,
                     ),
+                    TextField(
+                      controller: usernameController,
+                      decoration: InputDecoration(
+                          fillColor: Colors.white,
+                          filled: true,
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10))),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Email",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 2,
+                    ),
+                    TextField(
+                      controller: emailController,
+                      decoration: InputDecoration(
+                          fillColor: Colors.white,
+                          filled: true,
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10))),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Password",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 2,
+                    ),
+                    TextField(
+                      controller: passwordController,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                          fillColor: Colors.white,
+                          filled: true,
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10))),
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        signUp(context);
+                      },
+                      child: Container(
+                        width: 122,
+                        height: 40,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Center(
+                          child: Text(
+                            "Register",
+                            style: TextStyle(color: ColorsToUse().primaryColor),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 125,
+                          height: 1,
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.white)),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            "OR",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                        Container(
+                          width: 125,
+                          height: 1,
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.white)),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const CircleAvatar(
+                      backgroundColor: Colors.white,
+                      radius: 25,
+                      child: Image(
+                          image: NetworkImage(
+                              "https://cdn1.iconfinder.com/data/icons/google-s-logo/150/Google_Icons-09-512.png")),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Text(
+                          "Already Have an Account?\nLogin Now",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    )
                   ],
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
-                const CircleAvatar(
-                  backgroundColor: Colors.white,
-                  radius: 25,
-                  child: Image(
-                      image: NetworkImage(
-                          "https://cdn1.iconfinder.com/data/icons/google-s-logo/150/Google_Icons-09-512.png")),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Text(
-                    "Already Have an Account?\nLogin Now",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white),
-                  ),
-                )
-              ],
+              ),
             ),
           ),
         ]),
