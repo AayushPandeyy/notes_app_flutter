@@ -27,7 +27,7 @@ class _NoteBoxState extends State<NoteBox> {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.sizeOf(context).width * 0.45,
-      height: MediaQuery.sizeOf(context).height * 0.3,
+      // height: MediaQuery.sizeOf(context).height * 0.3,
       decoration: BoxDecoration(
           color: widget.bgColor, borderRadius: BorderRadius.circular(15)),
       child: Padding(
@@ -51,6 +51,9 @@ class _NoteBoxState extends State<NoteBox> {
                 ),
                 const Icon(Icons.more_horiz)
               ],
+            ),
+            const SizedBox(
+              height: 15,
             ),
             // quill.QuillEditor.basic(
 

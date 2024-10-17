@@ -77,9 +77,15 @@ class _LandingPageState extends State<LandingPage> {
                     document: doc,
                     selection: const TextSelection.collapsed(offset: 0),
                   );
-                  DateTime date = data["timestamp"].toDate();
-                  String formattedDate =
-                      DateFormat('EEE, MMM d, yyyy').format(date);
+                  String formattedDate;
+                  if (data.containsKey("timestamp") &&
+                      data["timestamp"] != null) {
+                    DateTime date = data["timestamp"].toDate();
+                    formattedDate = DateFormat('EEE, MMM d, yyyy').format(date);
+                  } else {
+                    formattedDate =
+                        "Unknown date"; // Fallback for missing timestamps
+                  }
                   widgets.add(
                     StaggeredGridTile.fit(
                       crossAxisCellCount: 2,
