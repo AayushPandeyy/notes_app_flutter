@@ -57,4 +57,20 @@ class FirestoreService {
       }).toList();
     });
   }
+  Stream<List<Map<String, dynamic>>> getPinnedNotesBasedOnUser() {
+    String uid = auth.currentUser!.uid;
+    return firestore
+        .collection('Notes')
+        .doc(uid)
+        .collection('notes')
+        .where("pinned",isEqualTo: true)
+        .snapshots()
+        
+        .map((snapshot) {
+      return snapshot.docs.map((doc) {
+        final todo = doc.data();
+        return todo;
+      }).toList();
+    });
+  }
 }

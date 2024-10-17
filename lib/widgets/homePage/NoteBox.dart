@@ -3,13 +3,20 @@ import "package:flutter_quill/flutter_quill.dart" as quill;
 
 class NoteBox extends StatefulWidget {
   final String title;
+  final String content;
   final quill.QuillController controller;
+  final String date;
   final Color bgColor;
-  const NoteBox(
-      {super.key,
-      required this.bgColor,
-      required this.title, required this.controller,
-      });
+  final bool isPinned;
+  const NoteBox({
+    super.key,
+    required this.bgColor,
+    required this.title,
+    required this.controller,
+    required this.content,
+    required this.date,
+    required this.isPinned,
+  });
 
   @override
   State<NoteBox> createState() => _NoteBoxState();
@@ -45,26 +52,30 @@ class _NoteBoxState extends State<NoteBox> {
                 const Icon(Icons.more_horiz)
               ],
             ),
-            quill.QuillEditor.basic(
-              controller: widget.controller,
-              configurations: const quill.QuillEditorConfigurations(
-                checkBoxReadOnly: true,
-                
-              ),
-            ),
-            // Text(
-            //     overflow: TextOverflow.ellipsis,
-            //     maxLines: 8,
-            //     style: const TextStyle(fontSize: 12),
-            //     widget.content),
-            const Row(
+            // quill.QuillEditor.basic(
+
+            //   controller: widget.controller,
+            //   configurations: const quill.QuillEditorConfigurations(
+
+            //     checkBoxReadOnly: true,
+
+            //   ),
+            // ),
+            Text(
+                overflow: TextOverflow.ellipsis,
+                maxLines: 8,
+                style: const TextStyle(fontSize: 12),
+                widget.content),
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Sun, Oct 14, 2024"),
-                Icon(
-                  Icons.push_pin,
-                  size: 16,
-                )
+                Text(widget.date),
+                widget.isPinned
+                    ? const Icon(
+                        Icons.push_pin,
+                        size: 16,
+                      )
+                    : Container()
               ],
             )
           ],

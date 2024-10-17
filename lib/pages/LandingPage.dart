@@ -1,9 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:intl/intl.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:notes_app_flutter/constants/ColorsToUse.dart';
 import 'package:notes_app_flutter/firebase/FirestoreService.dart';
+import 'package:notes_app_flutter/pages/CreateNotesScreen.dart';
 import 'package:notes_app_flutter/widgets/homePage/CreateNotesBox.dart';
 import 'package:notes_app_flutter/widgets/homePage/NoteBox.dart';
 import "package:flutter_quill/flutter_quill.dart" as quill;
@@ -52,8 +55,17 @@ class _LandingPageState extends State<LandingPage> {
                   );
                 }
                 List<Widget> widgets = [
-                  const StaggeredGridTile.fit(
-                      crossAxisCellCount: 2, child: CreateNotesBox()),
+                  StaggeredGridTile.fit(
+                      crossAxisCellCount: 2,
+                      child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                    builder: (context) =>
+                                        const CreateNotesScreen()));
+                          },
+                          child: const CreateNotesBox())),
                 ];
 
 // Iterate through snapshot data and add each NoteBox to the widgets list
@@ -65,10 +77,16 @@ class _LandingPageState extends State<LandingPage> {
                     document: doc,
                     selection: const TextSelection.collapsed(offset: 0),
                   );
+                  DateTime date = data["timestamp"].toDate();
+                  String formattedDate =
+                      DateFormat('EEE, MMM d, yyyy').format(date);
                   widgets.add(
                     StaggeredGridTile.fit(
                       crossAxisCellCount: 2,
                       child: NoteBox(
+                        isPinned: data["pinned"],
+                        date: formattedDate,
+                        content: _controller.document.toPlainText(),
                         controller: _controller,
                         title: data["title"],
                         bgColor: const Color(0xfffaf2ea),
