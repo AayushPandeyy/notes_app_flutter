@@ -12,12 +12,13 @@ class DialogBox {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             LoadingAnimationWidget.fourRotatingDots(
-                color: ColorsToUse().primaryColor, size: 20)
+                color: ColorsToUse().primaryColor, size: 50)
           ],
         ),
       ),
     );
   }
+
   void showAlertDialog(BuildContext context, String title, String message) {
     showDialog(
       context: context,

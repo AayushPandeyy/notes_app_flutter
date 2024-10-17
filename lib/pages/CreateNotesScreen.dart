@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:notes_app_flutter/constants/ColorsToUse.dart';
 
+import "package:flutter_quill/flutter_quill.dart" as quill;
+
 class CreateNotesScreen extends StatefulWidget {
   const CreateNotesScreen({super.key});
 
@@ -10,7 +12,8 @@ class CreateNotesScreen extends StatefulWidget {
 }
 
 class _CreateNotesScreenState extends State<CreateNotesScreen> {
-  int _selectedBottomBarIndex = 0;
+  final _controller = quill.QuillController.basic();
+  final int _selectedBottomBarIndex = 0;
   final List<Widget> bottomBarWidgets = [
     const Icon(Icons.image_rounded),
     const Icon(Icons.format_bold),
@@ -54,17 +57,21 @@ class _CreateNotesScreenState extends State<CreateNotesScreen> {
                       border: InputBorder.none),
                 ),
                 Expanded(
-                  child: Container(
-                    child: TextField(
-                      expands: true,
-                      maxLines: null,
-                      cursorColor: Colors.black,
-                      decoration: InputDecoration(
-                          hintText: "Start Typing...",
-                          hintStyle:
-                              TextStyle(color: ColorsToUse().primaryColor),
-                          border: InputBorder.none),
+                  child: quill.QuillEditor.basic(
+                    controller: _controller,
+                    configurations: const quill.QuillEditorConfigurations(
+                      placeholder: "Start Typing...",
                     ),
+                    // child: TextField(
+                    //   expands: true,
+                    //   maxLines: null,
+                    //   cursorColor: Colors.black,
+                    //   decoration: InputDecoration(
+                    //       hintText: "Start Typing...",
+                    //       hintStyle:
+                    //           TextStyle(color: ColorsToUse().primaryColor),
+                    //       border: InputBorder.none),
+                    // ),
                   ),
                 )
               ],
@@ -78,30 +85,37 @@ class _CreateNotesScreenState extends State<CreateNotesScreen> {
             height: 55,
             width: double.infinity,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15), color: Colors.white),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: bottomBarWidgets.map((widget) {
-                int index = bottomBarWidgets.indexOf(widget);
-                return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _selectedBottomBarIndex = index;
-                    });
-                  },
-                  child: Container(
-                    height: 40,
-                    width: 40,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: _selectedBottomBarIndex == index
-                            ? const Color(0xffd9d9d9)
-                            : Colors.transparent),
-                    child: widget,
-                  ),
-                );
-              }).toList(),
+              borderRadius: BorderRadius.circular(15),
             ),
+            child: quill.QuillToolbar.simple(
+                configurations: quill.QuillSimpleToolbarConfigurations(
+                  showColorButton: false,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10)),
+                  multiRowsDisplay: false,
+                  showBoldButton: true,
+                  showItalicButton: true,
+                  showUndo: true,
+                  showUnderLineButton: true,
+                  showRedo: true,
+                  showStrikeThrough: false,
+                  showListBullets: false,
+                  showFontFamily: false,
+                  showFontSize: false,
+                  showListNumbers: false,
+                  showListCheck: false,
+                  showCodeBlock: false,
+                  showHeaderStyle: false,
+                  showIndent: false,
+                  showLink: false,
+                  showAlignmentButtons: false,
+                  showDirection: false,
+                  showInlineCode: false,
+                  showQuote: false,
+                  showDividers: false,
+                ),
+                controller: _controller),
           ),
         )
       ]),

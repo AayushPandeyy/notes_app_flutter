@@ -32,11 +32,11 @@ class AuthService {
 
   Future<UserCredential> signUp(
       String email, String password, String username) async {
-    print("check");
     try {
       UserCredential user = await auth.createUserWithEmailAndPassword(
           email: email, password: password);
       firestoreService.addUserToDatabase(user.user!.uid, email, username);
+      print("data added");
       if (!user.user!.emailVerified) {
         await user.user!.sendEmailVerification();
       }
