@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-              margin: const EdgeInsets.only(right: 24, bottom: 24, left: 24),
+              margin: const EdgeInsets.only(right: 14, bottom: 14, left: 14),
               height: 55,
               width: double.infinity,
               decoration: BoxDecoration(

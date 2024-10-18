@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -72,11 +74,11 @@ class _LandingPageState extends State<LandingPage> {
                 for (var data in snapshot.data!) {
                   List<dynamic> content = data["content"];
                   final quill.Document doc = quill.Document.fromJson(content);
-
                   _controller = quill.QuillController(
                     document: doc,
                     selection: const TextSelection.collapsed(offset: 0),
                   );
+                  print(_controller.document.toPlainText());
                   String formattedDate;
                   if (data.containsKey("timestamp") &&
                       data["timestamp"] != null) {
@@ -89,13 +91,31 @@ class _LandingPageState extends State<LandingPage> {
                   widgets.add(
                     StaggeredGridTile.fit(
                       crossAxisCellCount: 2,
-                      child: NoteBox(
-                        isPinned: data["pinned"],
-                        date: formattedDate,
-                        content: _controller.document.toPlainText(),
-                        controller: _controller,
-                        title: data["title"],
-                        bgColor: const Color(0xfffaf2ea),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              CupertinoPageRoute(
+                                  builder: (context) => CreateNotesScreen(
+                                        pinned: data["pinned"],
+                                        controller: quill.QuillController(
+                                          document: doc,
+                                          selection:
+                                              const TextSelection.collapsed(
+                                                  offset: 0),
+                                        ),
+                                        title: data["title"],
+                                      )));
+                        },
+                        child: NoteBox(
+                          isPinned: data["pinned"],
+                          date: formattedDate,
+                          content: _controller.document.toPlainText(),
+                          controller: _controller,
+                          title: data["title"],
+                          bgColor:
+                              ColorsToUse().lightColors[Random().nextInt(14)],
+                        ),
                       ),
                     ),
                   );
@@ -167,8 +187,6 @@ class _LandingPageState extends State<LandingPage> {
                                       width: MediaQuery.sizeOf(context).width *
                                           0.2,
                                       decoration: BoxDecoration(
-                                          border:
-                                              Border.all(color: Colors.black),
                                           color: _selectedIndex == index
                                               ? Colors.black
                                               : Colors.white,

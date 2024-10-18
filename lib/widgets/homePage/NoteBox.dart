@@ -33,6 +33,7 @@ class _NoteBoxState extends State<NoteBox> {
       child: Padding(
         padding: const EdgeInsets.all(15.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(
@@ -55,20 +56,14 @@ class _NoteBoxState extends State<NoteBox> {
             const SizedBox(
               height: 15,
             ),
-            // quill.QuillEditor.basic(
-
-            //   controller: widget.controller,
-            //   configurations: const quill.QuillEditorConfigurations(
-
-            //     checkBoxReadOnly: true,
-
-            //   ),
-            // ),
             Text(
                 overflow: TextOverflow.ellipsis,
-                maxLines: 8,
+                maxLines: 4,
                 style: const TextStyle(fontSize: 12),
                 widget.content),
+            const SizedBox(
+              height: 5,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

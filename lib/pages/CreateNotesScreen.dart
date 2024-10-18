@@ -7,7 +7,11 @@ import 'package:notes_app_flutter/firebase/FirestoreService.dart';
 import 'package:notes_app_flutter/utilities/DialogBox.dart';
 
 class CreateNotesScreen extends StatefulWidget {
-  const CreateNotesScreen({super.key});
+  final quill.QuillController? controller;
+  final bool? pinned;
+  final String? title;
+  const CreateNotesScreen(
+      {super.key, this.controller, this.title, this.pinned});
 
   @override
   State<CreateNotesScreen> createState() => _CreateNotesScreenState();
@@ -16,13 +20,20 @@ class CreateNotesScreen extends StatefulWidget {
 class _CreateNotesScreenState extends State<CreateNotesScreen> {
   final FirestoreService service = FirestoreService();
   final titleController = TextEditingController();
-  bool isPinned = false;
+
   final _controller = quill.QuillController.basic();
 
   String currDate =
       DateFormat("MMM dd , EEE , yyyy  hh:mm a").format(DateTime.now());
   @override
   Widget build(BuildContext context) {
+    bool isPinned = widget.pinned ?? false;
+
+    if (widget.title != null) {
+      setState(() {
+        titleController.text = widget.title!;
+      });
+    }
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -75,7 +86,7 @@ class _CreateNotesScreenState extends State<CreateNotesScreen> {
                 ),
                 Expanded(
                   child: quill.QuillEditor.basic(
-                    controller: _controller,
+                    controller: widget.controller ?? _controller,
                     configurations: const quill.QuillEditorConfigurations(
                       placeholder: "Start Typing...",
                     ),
@@ -122,7 +133,7 @@ class _CreateNotesScreenState extends State<CreateNotesScreen> {
                   showQuote: false,
                   showDividers: false,
                 ),
-                controller: _controller),
+                controller: widget.controller ?? _controller),
           ),
         )
       ]),

@@ -1,7 +1,10 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:notes_app_flutter/constants/ColorsToUse.dart';
 import 'package:notes_app_flutter/firebase/FirestoreService.dart';
 import "package:flutter_quill/flutter_quill.dart" as quill;
 import 'package:notes_app_flutter/widgets/homePage/NoteBox.dart';
@@ -52,7 +55,7 @@ class _PinnedPageState extends State<PinnedPage> {
                   content: _controller.document.toPlainText(),
                   controller: _controller,
                   title: data["title"],
-                  bgColor: const Color(0xfffaf2ea),
+                  bgColor: ColorsToUse().lightColors[Random().nextInt(14)],
                 ),
               ),
             );
