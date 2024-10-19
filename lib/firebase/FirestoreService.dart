@@ -30,12 +30,26 @@ class FirestoreService {
 
   Future<void> saveNoteToFirestore(
       QuillController controller, bool pinned, String title) async {
+
     // Get the Quill document as JSON
     var jsonData = controller.document.toDelta().toJson();
 
     String uid = auth.currentUser!.uid;
+        String noteId = uid + DateTime.now().toString();
     // Store the note with a unique ID
-    await firestore.collection("Notes").doc(uid).collection("notes").doc().set({
+    await firestore.collection("Notes").doc(uid).collection("notes").doc(noteId).set({
+      "noteId":noteId,
+      'title': title,
+      'content': jsonData, // Save the document as JSON
+      'timestamp': FieldValue.serverTimestamp(),
+      'pinned': pinned,
+    });
+  }
+
+  Future<void> updateNote(QuillController controller,String noteId,String title,bool pinned) async{
+    var jsonData = controller.document.toDelta().toJson();
+    String uid = auth.currentUser!.uid;
+    await firestore.collection("Notes").doc(uid).collection("notes").doc(noteId).update({
       'title': title,
       'content': jsonData, // Save the document as JSON
       'timestamp': FieldValue.serverTimestamp(),
@@ -73,4 +87,6 @@ class FirestoreService {
       }).toList();
     });
   }
+
+
 }

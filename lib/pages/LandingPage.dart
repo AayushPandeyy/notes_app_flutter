@@ -97,6 +97,8 @@ class _LandingPageState extends State<LandingPage> {
                               context,
                               CupertinoPageRoute(
                                   builder: (context) => CreateNotesScreen(
+                                    update: true,
+                                        noteId: data["noteId"],
                                         pinned: data["pinned"],
                                         controller: quill.QuillController(
                                           document: doc,

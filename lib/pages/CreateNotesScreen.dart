@@ -7,11 +7,18 @@ import 'package:notes_app_flutter/firebase/FirestoreService.dart';
 import 'package:notes_app_flutter/utilities/DialogBox.dart';
 
 class CreateNotesScreen extends StatefulWidget {
+  final bool? update;
+  final String? noteId;
   final quill.QuillController? controller;
   final bool? pinned;
   final String? title;
   const CreateNotesScreen(
-      {super.key, this.controller, this.title, this.pinned});
+      {super.key,
+      this.controller,
+      this.title,
+      this.pinned,
+      this.noteId,
+      this.update});
 
   @override
   State<CreateNotesScreen> createState() => _CreateNotesScreenState();
@@ -25,9 +32,25 @@ class _CreateNotesScreenState extends State<CreateNotesScreen> {
 
   String currDate =
       DateFormat("MMM dd , EEE , yyyy  hh:mm a").format(DateTime.now());
+
   @override
   Widget build(BuildContext context) {
     bool isPinned = widget.pinned ?? false;
+    void addNote() async {
+      DialogBox().showLoadingDialog(context, "LLoading");
+      await service.saveNoteToFirestore(
+          _controller, isPinned, titleController.text);
+      Navigator.pop(context);
+      Navigator.pop(context);
+    }
+
+    void updateNote() async {
+      DialogBox().showLoadingDialog(context, "LLoading");
+      await service.updateNote(
+          widget.controller!, widget.noteId!, titleController.text, isPinned);
+      Navigator.pop(context);
+      Navigator.pop(context);
+    }
 
     if (widget.title != null) {
       setState(() {
@@ -53,12 +76,8 @@ class _CreateNotesScreenState extends State<CreateNotesScreen> {
                 color: isPinned ? ColorsToUse().primaryColor : Colors.black,
               )),
           IconButton(
-              onPressed: () async {
-                DialogBox().showLoadingDialog(context, "LLoading");
-                await service.saveNoteToFirestore(
-                    _controller, isPinned, titleController.text);
-                Navigator.pop(context);
-                Navigator.pop(context);
+              onPressed: () {
+                widget.update == true ? updateNote() : addNote();
               },
               icon: const Icon(Icons.check))
         ],
