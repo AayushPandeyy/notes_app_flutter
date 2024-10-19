@@ -25,6 +25,7 @@ class CreateNotesScreen extends StatefulWidget {
 }
 
 class _CreateNotesScreenState extends State<CreateNotesScreen> {
+  bool? pinStatus;
   final FirestoreService service = FirestoreService();
   final titleController = TextEditingController();
 
@@ -32,14 +33,21 @@ class _CreateNotesScreenState extends State<CreateNotesScreen> {
 
   String currDate =
       DateFormat("MMM dd , EEE , yyyy  hh:mm a").format(DateTime.now());
+  @override
+  void initState() {
+    // TODO: implement initState
+    setState(() {
+      pinStatus = widget.pinned!;
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    bool isPinned = widget.pinned ?? false;
     void addNote() async {
       DialogBox().showLoadingDialog(context, "LLoading");
       await service.saveNoteToFirestore(
-          _controller, isPinned, titleController.text);
+          _controller, pinStatus!, titleController.text);
       Navigator.pop(context);
       Navigator.pop(context);
     }
@@ -47,7 +55,7 @@ class _CreateNotesScreenState extends State<CreateNotesScreen> {
     void updateNote() async {
       DialogBox().showLoadingDialog(context, "LLoading");
       await service.updateNote(
-          widget.controller!, widget.noteId!, titleController.text, isPinned);
+          widget.controller!, widget.noteId!, titleController.text, pinStatus!);
       Navigator.pop(context);
       Navigator.pop(context);
     }
@@ -68,12 +76,13 @@ class _CreateNotesScreenState extends State<CreateNotesScreen> {
           IconButton(
               onPressed: () {
                 setState(() {
-                  isPinned = !isPinned;
+                  pinStatus = !pinStatus!;
                 });
+                print(pinStatus!);
               },
               icon: Icon(
                 Icons.push_pin,
-                color: isPinned ? ColorsToUse().primaryColor : Colors.black,
+                color: pinStatus! ? Colors.red : Colors.black,
               )),
           IconButton(
               onPressed: () {
